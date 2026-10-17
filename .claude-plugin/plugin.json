@@ -1,0 +1,13 @@
+{
+  "name": "recipe-to-table",
+  "description": "Rewrites a conventional recipe as a tabular recipe chart: setup tasks on top, then ingredients grouped by phase with actions progressing left-to-right in merged cells to the finished dish.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jjainschigg-r",
+    "url": "https://github.com/jjainschigg-r"
+  },
+  "homepage": "https://github.com/jjainschigg-r/recipe-to-table",
+  "repository": "https://github.com/jjainschigg-r/recipe-to-table",
+  "license": "MIT",
+  "keywords": ["recipe", "cooking", "table", "chart", "skill"]
+}

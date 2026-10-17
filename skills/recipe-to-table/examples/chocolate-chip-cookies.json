@@ -1,0 +1,57 @@
+{
+  "title": "Classic Chocolate Chip Cookies",
+  "yield": "about 36",
+  "before": [
+    "Soften butter",
+    "Preheat oven to 375°F",
+    "Line baking sheets with parchment"
+  ],
+  "assembly": {
+    "action": "cool completely on wire racks",
+    "inputs": [
+      {
+        "action": "cool on sheets 2 min.",
+        "inputs": [
+          {
+            "action": "drop by rounded Tbs.; bake 9–11 min. until golden brown",
+            "inputs": [
+              {
+                "action": "stir in",
+                "inputs": [
+                  {
+                    "action": "gradually beat in",
+                    "inputs": [
+                      {
+                        "action": "beat until creamy; beat in eggs one at a time",
+                        "inputs": [
+                          { "ingredient": "1 cup (2 sticks) butter, softened" },
+                          { "ingredient": "3/4 cup granulated sugar" },
+                          { "ingredient": "3/4 cup packed brown sugar" },
+                          { "ingredient": "1 tsp vanilla extract" },
+                          { "ingredient": "2 large eggs" }
+                        ]
+                      },
+                      {
+                        "action": "combine",
+                        "inputs": [
+                          { "ingredient": "2 1/4 cups all-purpose flour" },
+                          { "ingredient": "1 tsp baking soda" },
+                          { "ingredient": "1 tsp salt" }
+                        ]
+                      }
+                    ]
+                  },
+                  { "ingredient": "2 cups semisweet chocolate chips" },
+                  { "ingredient": "1 cup chopped nuts (optional)" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "notes": [
+    "Beat well after adding each egg."
+  ]
+}

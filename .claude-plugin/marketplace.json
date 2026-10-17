@@ -1,0 +1,16 @@
+{
+  "name": "recipe-to-table",
+  "description": "A single-plugin marketplace for recipe-to-table: rewrite recipes as tabular recipe charts.",
+  "owner": {
+    "name": "jjainschigg-r",
+    "url": "https://github.com/jjainschigg-r"
+  },
+  "plugins": [
+    {
+      "name": "recipe-to-table",
+      "source": "./",
+      "description": "Rewrites a conventional recipe as a tabular recipe chart: setup tasks on top, then ingredients grouped by phase with actions progressing left-to-right in merged cells to the finished dish.",
+      "version": "1.0.0"
+    }
+  ]
+}

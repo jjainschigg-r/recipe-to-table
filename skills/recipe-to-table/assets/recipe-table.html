@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recipe</title>
+<style>
+  :root {
+    --bg: #fbfaf3;
+    --paper: #ffffff;
+    --ink: #1d1f1a;
+    --muted: #5d6157;
+    --rule: #5aa83c;
+    --rule-soft: #9fcb8a;
+    --before-bg: #f3f8ee;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151714;
+      --paper: #1d201b;
+      --ink: #ecefe7;
+      --muted: #a4aa9c;
+      --rule: #6fbf4f;
+      --rule-soft: #3f6a2e;
+      --before-bg: #222a1d;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #151714;
+    --paper: #1d201b;
+    --ink: #ecefe7;
+    --muted: #a4aa9c;
+    --rule: #6fbf4f;
+    --rule-soft: #3f6a2e;
+    --before-bg: #222a1d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 24px 16px 48px;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.3 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 1.25rem; margin: 0 0 6px; }
+  h1 .yield { font-weight: 400; color: var(--muted); }
+  .scroll { overflow-x: auto; }
+  table.recipe {
+    border-collapse: collapse;
+    background: var(--paper);
+    border: 3px solid var(--rule);
+    width: 100%;
+  }
+  table.recipe td {
+    border: 2px solid var(--rule-soft);
+    padding: 6px 8px;
+    vertical-align: middle;
+  }
+  td.before { text-align: center; background: var(--before-bg); }
+  td.ingredient { text-align: left; min-width: 9em; }
+  td.action { text-align: center; min-width: 5.5em; }
+  td.blank { min-width: 2.5em; }
+  .notes { margin-top: 14px; color: var(--muted); font-size: 0.95rem; }
+  .notes ul { margin: 4px 0 0; padding-left: 1.2em; }
+  .source { margin-top: 10px; color: var(--muted); font-size: 0.85rem; }
+  .error { color: #b3261e; white-space: pre-wrap; }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .scroll { overflow: visible; }
+  }
+</style>
+</head>
+<body>
+<main id="out"></main>
+<script type="application/json" id="recipe">__RECIPE_JSON__</script>
+<script>
+// Renders the recipe JSON (see references/method.md, "Data format") as a
+// two-region table. Layout rules:
+//   - a leaf with "prep" is a one-input step wrapping the bare ingredient
+//   - column(ingredient) = 0; column(step) = 1 + max(column(inputs))
+//   - a step cell spans the rows of every ingredient beneath it
+//   - columns between an input and its step are blank cells, merged
+//     vertically across adjacent inputs that share the gap
+(function () {
+  var out = document.getElementById("out");
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function normalize(n) {
+    if (n.ingredient !== undefined) {
+      var leaf = { ingredient: n.ingredient };
+      return n.prep ? { action: n.prep, inputs: [leaf] } : leaf;
+    }
+    return { action: n.action, inputs: n.inputs.map(normalize) };
+  }
+
+  function measure(n) {
+    if (n.ingredient !== undefined) { n.col = 0; n.rows = 1; return; }
+    n.inputs.forEach(measure);
+    n.col = 1 + Math.max.apply(null, n.inputs.map(function (c) { return c.col; }));
+    n.rows = n.inputs.reduce(function (s, c) { return s + c.rows; }, 0);
+  }
+
+  function place(n, row, cells) {
+    if (n.ingredient !== undefined) {
+      cells.push({ row: row, col: 0, rowspan: 1, kind: "ingredient", text: n.ingredient });
+      return;
+    }
+    cells.push({ row: row, col: n.col, rowspan: n.rows, kind: "action", text: n.action });
+    var r = row;
+    n.inputs.forEach(function (c) { place(c, r, cells); r += c.rows; });
+    for (var g = 1; g < n.col; g++) {
+      var run = null;
+      r = row;
+      n.inputs.forEach(function (c) {
+        if (c.col < g) {
+          if (run) run.rowspan += c.rows;
+          else { run = { row: r, col: g, rowspan: c.rows, kind: "blank", text: "" }; cells.push(run); }
+        } else {
+          run = null;
+        }
+        r += c.rows;
+      });
+    }
+  }
+
+  try {
+    var recipe = JSON.parse(document.getElementById("recipe").textContent);
+    if (recipe.title) document.title = recipe.title;
+
+    var h1 = el("h1", null, recipe.title || "Recipe");
+    if (recipe.yield) {
+      h1.appendChild(document.createTextNode(" "));
+      h1.appendChild(el("span", "yield", "(" + recipe.yield + ")"));
+    }
+    out.appendChild(h1);
+
+    var root = normalize(recipe.assembly);
+    measure(root);
+    var ncols = root.col + 1;
+    var cells = [];
+    place(root, 0, cells);
+
+    var table = el("table", "recipe");
+    var tbody = el("tbody");
+    (recipe.before || []).forEach(function (text) {
+      var tr = el("tr");
+      var td = el("td", "before", text);
+      td.colSpan = ncols;
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+    });
+
+    var byRow = [];
+    for (var i = 0; i < root.rows; i++) byRow.push([]);
+    cells.forEach(function (c) { byRow[c.row].push(c); });
+    byRow.forEach(function (rowCells) {
+      var tr = el("tr");
+      rowCells.sort(function (a, b) { return a.col - b.col; });
+      rowCells.forEach(function (c) {
+        var td = el("td", c.kind, c.text);
+        if (c.rowspan > 1) td.rowSpan = c.rowspan;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    var scroll = el("div", "scroll");
+    scroll.appendChild(table);
+    out.appendChild(scroll);
+
+    if (recipe.notes && recipe.notes.length) {
+      var notes = el("div", "notes");
+      notes.appendChild(el("strong", null, "Notes"));
+      var ul = el("ul");
+      recipe.notes.forEach(function (t) { ul.appendChild(el("li", null, t)); });
+      notes.appendChild(ul);
+      out.appendChild(notes);
+    }
+    if (recipe.source) out.appendChild(el("div", "source", "Source: " + recipe.source));
+  } catch (err) {
+    out.appendChild(el("p", "error", "Could not render recipe: " + err.message));
+  }
+})();
+</script>
+</body>
+</html>

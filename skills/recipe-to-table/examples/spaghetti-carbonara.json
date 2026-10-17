@@ -1,0 +1,40 @@
+{
+  "title": "Spaghetti Carbonara",
+  "yield": "4 servings",
+  "before": [
+    "Bring a large pot of salted water to a boil",
+    "Warm a large serving bowl"
+  ],
+  "assembly": {
+    "action": "top and serve immediately",
+    "inputs": [
+      {
+        "action": "toss off heat until creamy",
+        "inputs": [
+          { "ingredient": "1 lb (450 g) spaghetti", "prep": "boil until al dente; drain" },
+          {
+            "action": "cook over medium until crisp",
+            "inputs": [
+              { "ingredient": "1 Tbs. olive oil" },
+              { "ingredient": "6 oz (170 g) guanciale, diced" }
+            ]
+          },
+          {
+            "action": "whisk",
+            "inputs": [
+              { "ingredient": "3 large eggs + 1 yolk" },
+              { "ingredient": "1 cup (of 1-1/2) grated Pecorino Romano" },
+              { "ingredient": "1 tsp. coarsely ground black pepper" }
+            ]
+          },
+          { "ingredient": "reserved pasta water, as needed" }
+        ]
+      },
+      { "ingredient": "1/2 cup (remaining) grated Pecorino Romano" }
+    ]
+  },
+  "notes": [
+    "Scoop out about 1 cup of pasta cooking water before draining; add it a splash at a time while tossing.",
+    "Toss off the heat so the eggs thicken into a sauce instead of scrambling."
+  ]
+}

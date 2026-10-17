@@ -1,0 +1,51 @@
+{
+  "title": "Banana Nut Bread",
+  "yield": "about 10 servings",
+  "before": [
+    "Butter and flour a loaf pan",
+    "Preheat oven to 350°F (170°C)"
+  ],
+  "assembly": {
+    "action": "cool on wire rack",
+    "inputs": [
+      {
+        "action": "cool 10 min. in pan",
+        "inputs": [
+          {
+            "action": "bake 350°F (170°C) 55 min.",
+            "inputs": [
+              {
+                "action": "fold",
+                "inputs": [
+                  {
+                    "action": "mash until smooth",
+                    "inputs": [
+                      { "ingredient": "2 large (250 g) ripe bananas", "prep": "mash" },
+                      { "ingredient": "6 Tbs. (90 mL) butter", "prep": "melt" },
+                      { "ingredient": "1 tsp. (5 mL) vanilla extract" },
+                      { "ingredient": "2 large eggs", "prep": "lightly beat" }
+                    ]
+                  },
+                  {
+                    "action": "whisk",
+                    "inputs": [
+                      { "ingredient": "1-1/3 cups (167 g) all-purpose flour" },
+                      { "ingredient": "2/3 cup (130 g) sugar" },
+                      { "ingredient": "1/2 tsp. (2.3 g) baking soda" },
+                      { "ingredient": "1/4 tsp. (1.2 g) baking powder" },
+                      { "ingredient": "1/2 tsp. (3 g) salt" }
+                    ]
+                  },
+                  { "ingredient": "1/2 cup (70 g) chopped walnuts" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "notes": [
+    "Done when a toothpick inserted in the center comes out clean."
+  ]
+}
